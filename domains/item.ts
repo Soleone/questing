@@ -26,7 +26,7 @@ export const Item = {
     return item.tags?.includes(tag)
   },  
   hasInterface(item: ItemType, interfaceName: string) {
-    return Object.keys(item.interfaces || {}).includes(interfaceName)
+    return Object.keys(item.interfaces ?? {}).includes(interfaceName)
   },
   setState(item: ItemType, name: string, value: StateValues | State) {
     if (!item.state) {

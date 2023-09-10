@@ -16,7 +16,7 @@ export const Location = {
     return locationId
   },
   adjacentLocationIds(locationId: string, map: Map) {
-    const right_locations = map[locationId] || []
+    const right_locations = map[locationId] ?? []
     const left_locations = Object.keys(map).filter(location => map[location].includes(locationId))
     return [...left_locations, ...right_locations]
   },
