@@ -19,31 +19,41 @@ import { locations} from "./data/locations"
 import { map } from "./data/maps"
 import { player } from "./data/players"
 
-const Commands = {
-  look(game: Game) {
-    if (!game.target) {
-      const locationId = Location.id(game.currentLocation, game.locations)
-      const adjacentLocationIds = Location.adjacentLocationIds(locationId, game.map)
-      const locations = Location.findAll(adjacentLocationIds, game.locations)
-      game.describeScene()
+class Commands {
+  private game: Game
+
+  constructor(game: Game) {
+    console.log(`GAME: ${this.game}`)
+    this.game = game
+  }
+
+  look() {
+    if (!this.game.target) {
+      const locationId = Location.id(this.game.currentLocation, this.game.locations)
+      const adjacentLocationIds = Location.adjacentLocationIds(locationId, this.game.map)
+      const locations = Location.findAll(adjacentLocationIds, this.game.locations)
+      this.game.describeScene()
       console.log(`Seeing locations: ${locations.map(location => location.name)}`)
     } else {
-      const reaction = Targetable.lookAt(game.target, game)
+      const reaction = Targetable.lookAt(this.game.target, this.game)
       console.log(reaction.message)
     }
-  },
-  target(game: Game, targetable: TargetableType) {
-    game.setTarget(targetable)
-    game.describeStatus()
-  },
-  deselect(game: Game) {
-    game.setTarget(null)
-  },
-  move(game: Game) {
-    if (game.target) {
-      const reaction = LocationActions.moveTo(game.target as LocationType, game)
+  }
+
+  target(targetable: TargetableType) {
+    this.game.setTarget(targetable)
+    this.game.describeStatus()
+  }
+
+  deselect() {
+    this.game.setTarget(null)
+  }
+
+  move() {
+    if (this.game.target) {
+      const reaction = LocationActions.moveTo(this.game.target as LocationType, this.game)
       if (reaction.ok) {
-        Commands.deselect(game)
+        this.deselect()
       }
       console.log(reaction.message)
     } else {
@@ -53,8 +63,8 @@ const Commands = {
 }
 
 const GameHelpers = {
-  firstLocationName(game: GameType) {
-    const firstLocationName = Object.keys(game.map)[0]
+  firstLocationName(map: MapType) {
+    const firstLocationName = Object.keys(map)[0]
     return firstLocationName
   },
   addIdsFromRecord(record: Record<string, Record<string, any>>) {
@@ -79,19 +89,21 @@ class Game implements GameType {
   focussedItem: ItemType | null
   target: TargetableType | null
   currentTurn: number
+  commands: Commands
 
   constructor(parameters: GameParametersType) {
     this.locations = parameters.locations
     this.map = parameters.map
     this.items = parameters.items
     this.player = parameters.player
-    const firstLocationName = GameHelpers.firstLocationName(this)
+    const firstLocationName = GameHelpers.firstLocationName(this.map)
     this.currentLocation = Location.find(firstLocationName, this.locations)
     GameHelpers.addIdsFromRecord(this.locations)
     GameHelpers.addIdsFromRecord(this.items)
     this.focussedItem = null
     this.target = null
     this.currentTurn = 1
+    this.commands = new Commands(this)
   }
 
   async start() {
@@ -120,23 +132,18 @@ class Game implements GameType {
   }
 
   processCommand(input: string) {
-    const commandNames = Object.keys(Commands)
+    const commandNames = this.commandPropertyNames()
     if (commandNames.includes(input)) {
       this.nextTurn()
-      const commandAction = Commands[input]
-      if (commandAction) {
-        if (this.target) {
-          commandAction(this, this.target)
-        } else {
-          commandAction(this)
-        }
+      if (this.target) {
+        this.commands[input](this.target)
       } else {
-        console.log("Don't understand this command!")
+        this.commands[input]()
       }
     } else {
-      const target = Location.findByName(input, this.locations) || Item.findByName(input, this.items)
+      const target = Location.findByName(input, this.locations) ?? Item.findByName(input, this.items)
       if (target) {
-        Commands.target(this, target)
+        this.commands.target(target)
       }
     }
   }
@@ -177,8 +184,13 @@ class Game implements GameType {
     }
   }
 
-  nextTurn() {
+  private nextTurn() {
     this.currentTurn += 1
+  }
+
+  private commandPropertyNames() {
+    return Object.getOwnPropertyNames(Commands.prototype)
+      .filter(name => typeof Commands.prototype[name] === 'function' && name !== 'constructor')
   }
 }
 
