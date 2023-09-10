@@ -1,6 +1,12 @@
 # Hacker Game (codename)
 
-A game framework to build extensible player interactions.
+A game framework to build extensible player interactions. Developed to run in the [Bun](https://bun.sh) environment.
+
+## Usage
+
+1. Install Bun
+2. Clone repo
+3. Run `bun game.ts`
 
 ## Fundamentals
 
