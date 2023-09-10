@@ -1,25 +1,29 @@
 # Hacker Game (codename)
 
+A game framework to build extensible player interactions.
+
+## Fundamentals
+
+- Actions take a Game as arguments (to be able to act on anything) and return a Reaction
+
 ## Features
 
-- [x] targetting (location to move, item from inventory to combine with location item)
-- [x] moving between locations
-- [x] item state
+- [x] Targetting (location to move, item from inventory to combine with location item)
+- [x] Moving between locations
+- [x] Item state
 
 ## TODO
 
-- [ ] immediately show adjacent locations when looking around
-- [ ] select property and open it
-- [ ] pick up items
-- [ ] focussing items
-- [ ] readable Pages and Books
-- [ ] look around
+- [ ] Immediately show adjacent locations when looking around
+- [ ] Select property and open it
+- [ ] Pick up items
+- [ ] Focussing items
+- [ ] Readable Pages and Books
+- [ ] Look around
   - location
   - description
   - adjacent locations
   - items
-- [ ] openable containers that have their items hidden otherwise
-
-## Rules
-
-- Actions take a Game as arguments (to be able to act on anything) and return a Reaction
+- [ ] Openable containers that have their items hidden otherwise
+- [ ] Turn into visual Remix app
+- [ ] Tests
