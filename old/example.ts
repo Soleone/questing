@@ -1,5 +1,4 @@
 import { Item } from "../domains/item"
-import { Container, Item as ItemActions } from "../actions"
 import { items } from "../data/items"
 
 export function exampleCode() {
@@ -15,7 +14,6 @@ export function exampleCode() {
       console.log(`Got first property named ${firstProp?.name}`)
     }
   }
-  ItemActions.lookAt(item)
 }
 
 exampleCode()
