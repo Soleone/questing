@@ -1,4 +1,4 @@
-name: Bun test
+name: Tests
 on:
   push:
     branches: [ main ]
