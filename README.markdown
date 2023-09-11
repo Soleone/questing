@@ -1,4 +1,4 @@
-# Hacker Game (codename)
+# Questing
 
 A game framework to build extensible player interactions. Developed to run in the [Bun](https://bun.sh) environment.
 
