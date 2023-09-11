@@ -1,47 +1,46 @@
-import { describe, expect, test, beforeAll } from "bun:test"
+import { describe, expect, test, beforeEach } from "bun:test"
 import { Item } from "../../models/item"
-import { Item as ItemType } from "../../types"
+import {
+  RawItem as RawItemType,
+  Item as ItemType,
+} from "../../types"
 
-let items: Record<string, ItemType>
-
-beforeAll(() => {
-  items = {
-    "1": { name: "item 1" },
-    "2": { name: "item 2" }
-  }
-})
+let rawItems: RawItemType[] = [
+  { name: "item 1" },
+  { name: "item 2" },
+]
 
 describe("static functionality", () => {
-  test("without setItems first, find doesn't return any result", () => {
+  test("without loadItems first, find doesn't return any result", () => {
+    // TODO: Would need an actually deterministic ID here
     expect(Item.find("1")).toBe(undefined)
   })
 
   test("setItems enables find", () => {
-    
-    Item.setItems(items)
-    expect(Item.find("1")).toBe(items["1"])
+    Item.loadItems([{ name: "item 1" }])
+    const id = Array.from(Item.items.keys())[0]
+    expect(Item.find(id)?.name).toBe(rawItems[0].name)
   })
 })
 
-describe("with setItems already initialized", () => {
+describe("with loadItems already initialized", () => {
+  beforeEach(() => {
+    Item.loadItems(rawItems)
+  })
+
   test("findByName returns the correct item", () => {
-    expect(Item.findByName("item 1")).toBe(items["1"])
+    expect(Item.findByName("item 1")?.name).toBe(rawItems[0].name)
   })
 
   test("findAll returns the correct items", () => {
-    expect(Item.findAll(["1", "2"])).toEqual([items["1"], items["2"]])
+    const ids = Array.from(Item.items.keys())
+    const itemNames = Item.findAll(ids).map(item => item.name)
+    const expectedItemNames = [rawItems[0].name, rawItems[1].name]
+    expect(itemNames).toEqual(expectedItemNames)
   })
 
   test("findAll with empty array returns empty array", () => {
     expect(Item.findAll([])).toEqual([])
-  })
-
-  test("id returns the correct id", () => {
-    expect(Item.id(items["1"])).toBe("1")
-  })
-
-  test("id throws an error if the item is not found", () => {
-    expect(() => Item.id({ name: "not found" })).toThrow("No item with this ID")
   })
 })
 

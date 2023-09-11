@@ -6,7 +6,8 @@ A game framework to build extensible player interactions. Developed to run in th
 
 1. Install Bun
 2. Clone repo
-3. Run `bun game.ts`
+3. `bun install`
+4. `bun game.ts`
 
 ## Fundamentals
 
@@ -20,6 +21,7 @@ A game framework to build extensible player interactions. Developed to run in th
 
 ## TODO
 
+- [ ] Item definitions vs item instances (e.g. multiple batteries)
 - [ ] Immediately show adjacent locations when looking around
 - [ ] Select property and open it
 - [ ] Pick up items
@@ -33,3 +35,7 @@ A game framework to build extensible player interactions. Developed to run in th
 - [ ] Openable containers that have their items hidden otherwise
 - [ ] Turn into visual Remix app
 - [ ] Tests
+
+## Contributing
+
+`bun test` to run all tests

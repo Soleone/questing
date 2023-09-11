@@ -1,18 +1,23 @@
 import type {
   Item as ItemType,
-  Map as MapType,
+  RawItem as RawItemType,
+  LocationMap as LocationMapType,
   Game as GameType,
   Location as LocationType,
   Targetable as TargetableType,
   Player as PlayerType,
   GameParameters as GameParametersType,
+  Id,
+  TargetableValidCommands,
+  UntargetableValidCommands,
+  ValidCommands,
 } from "./types"
 
 import {
   Location as LocationActions, Targetable
 } from "./actions"
 import { Location } from "./domains/location"
-import { Item } from "./domains/item"
+import { Item } from "./models/item"
 // Data
 import { items } from "./data/items"
 import { locations} from "./data/locations"
@@ -23,7 +28,6 @@ class Commands {
   private game: Game
 
   constructor(game: Game) {
-    console.log(`GAME: ${this.game}`)
     this.game = game
   }
 
@@ -32,6 +36,8 @@ class Commands {
       const locationId = Location.id(this.game.currentLocation, this.game.locations)
       const adjacentLocationIds = Location.adjacentLocationIds(locationId, this.game.map)
       const locations = Location.findAll(adjacentLocationIds, this.game.locations)
+      // refactor to use new visibleTargets function
+      // const locations = this.game.visibleTargets()
       this.game.describeScene()
       console.log(`Seeing locations: ${locations.map(location => location.name)}`)
     } else {
@@ -63,7 +69,7 @@ class Commands {
 }
 
 const GameHelpers = {
-  firstLocationName(map: MapType) {
+  firstLocationName(map: LocationMapType) {
     const firstLocationName = Object.keys(map)[0]
     return firstLocationName
   },
@@ -82,8 +88,8 @@ const parameters: GameParametersType = {
 
 class Game implements GameType {
   locations: Record<string, LocationType>
-  map: MapType
-  items: Record<string, ItemType>
+  map: LocationMapType
+  items: Map<Id, Item>
   player: PlayerType
   currentLocation: LocationType
   focussedItem: ItemType | null
@@ -94,12 +100,12 @@ class Game implements GameType {
   constructor(parameters: GameParametersType) {
     this.locations = parameters.locations
     this.map = parameters.map
-    this.items = parameters.items
+    Item.loadItems(parameters.items)
+    this.items = Item.items
     this.player = parameters.player
     const firstLocationName = GameHelpers.firstLocationName(this.map)
     this.currentLocation = Location.find(firstLocationName, this.locations)
     GameHelpers.addIdsFromRecord(this.locations)
-    GameHelpers.addIdsFromRecord(this.items)
     this.focussedItem = null
     this.target = null
     this.currentTurn = 1
@@ -136,12 +142,12 @@ class Game implements GameType {
     if (commandNames.includes(input)) {
       this.nextTurn()
       if (this.target) {
-        this.commands[input](this.target)
+        this.commands[input as TargetableValidCommands](this.target)
       } else {
-        this.commands[input]()
+        this.commands[input as UntargetableValidCommands]()
       }
     } else {
-      const target = Location.findByName(input, this.locations) ?? Item.findByName(input, this.items)
+      const target = Location.findByName(input, this.locations) ?? Item.findByName(input)
       if (target) {
         this.commands.target(target)
       }
@@ -150,7 +156,7 @@ class Game implements GameType {
   
   describeScene() {
     console.log(`Current location: ${this.currentLocation.name}`)
-    console.log(`Visible items: ${this.currentLocation.items?.map(item => item.name)}`)
+    //console.log(`Visible items: ${this.currentLocation.items?.map(item => item.name)}`)
   }
   
   describeStatus() {
@@ -177,11 +183,19 @@ class Game implements GameType {
     //console.log(`Setting target to ${targetable?.name}`)
   }
 
-  destroyItem(id: string) {
-    delete this.items[id]
-    if (this.focussedItem && Item.id(this.focussedItem, this.items) === id) {
+  destroyItem(id: Id) {
+    this.items.delete(id)
+    if (this.focussedItem && this.focussedItem.id === id) {
       this.focussedItem = null
     }
+  }
+
+  visibleTargets() {
+    const locationId = Location.id(this.currentLocation, this.locations)
+    const adjacentLocationIds = Location.adjacentLocationIds(locationId, this.map)
+    const locations = Location.findAll(adjacentLocationIds, this.locations)
+    const items = this.currentLocation.items ?? []
+    return [...locations, ...items]
   }
 
   private nextTurn() {
@@ -190,7 +204,7 @@ class Game implements GameType {
 
   private commandPropertyNames() {
     return Object.getOwnPropertyNames(Commands.prototype)
-      .filter(name => typeof Commands.prototype[name] === 'function' && name !== 'constructor')
+      .filter(name => typeof Commands.prototype[name as ValidCommands] === 'function' && name !== 'constructor')
   }
 }
 

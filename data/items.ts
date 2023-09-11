@@ -1,7 +1,7 @@
-import type { Item, Game, IndexedList, Reaction } from "../types"
+import type { RawItem } from "../types"
 
-export const items: IndexedList<Item> = {
-  desk: {
+export const items: RawItem[] = [
+  {
     name: "Desk",
     properties: [
       {
@@ -19,7 +19,7 @@ export const items: IndexedList<Item> = {
             // }
           },
           // usable: {
-          //   use(item: Item, game: Game): Reaction {
+          //   action(item: Item, game: Game): Reaction {
           //     return {
           //       ok: true,
           //       message: "It's hot"
@@ -39,8 +39,9 @@ export const items: IndexedList<Item> = {
       }
     ],
   },
-  paper: {
+  {
     name: "Paper",
+    description: "The paper reads the following: The lighter is in the desk in the house at the end of the path.",
     // reactions: {
     //   onFire(item: Item, game: Game) {
     //     console.log(`${item.name} evaporates. Good job!`)
@@ -48,4 +49,4 @@ export const items: IndexedList<Item> = {
     //   }
     // }
   }
-}
+]

@@ -1,4 +1,4 @@
-import { Location as LocationType, IndexedList, Map } from "../types"
+import { Location as LocationType, IndexedList, LocationMap } from "../types"
 
 export const Location = {
   find(id: string, locations: IndexedList<LocationType>) {
@@ -15,12 +15,12 @@ export const Location = {
     if (!locationId) throw new Error("No location with this ID")
     return locationId
   },
-  adjacentLocationIds(locationId: string, map: Map) {
+  adjacentLocationIds(locationId: string, map: LocationMap) {
     const right_locations = map[locationId] ?? []
     const left_locations = Object.keys(map).filter(location => map[location].includes(locationId))
     return [...left_locations, ...right_locations]
   },
-  isAdjacentLocation(from: string, to: string, map: Map) {
+  isAdjacentLocation(from: string, to: string, map: LocationMap) {
     return this.adjacentLocationIds(from, map).includes(to)
   }
 }

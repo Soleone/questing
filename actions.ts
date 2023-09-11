@@ -7,8 +7,6 @@ import type {
 } from "./types"
 
 import {Location as LocationHelper} from "./domains/location"
-import {Item as ItemHelper} from "./domains/item"
-import { items } from "./data/items.js"
 
 export const Item = {
 }
@@ -27,7 +25,7 @@ export const Container = {
         message: `${container.name} was opened.`,
         focus: container.items,
         result: (game) => {
-          ItemHelper.setState(container, "open", true)
+          container.setState("open", true)
         }
       }
     }
@@ -36,11 +34,11 @@ export const Container = {
     if (container.state?.locked) {
       // const challenge = () => { true }
       // solveUnlockChallenge(challenge)
-      const challenge = container.interfaces?.container?.unlockChallenge
+      const challenge = container.interfaces.container?.unlockChallenge
       if (challenge) {
         const challengeSuccess = challenge(container, game)
         if (challengeSuccess) {
-          ItemHelper.setState(container, "locked", false)
+          container.setState("locked", false)
           return {
             ok: true,
             message: "The lock opened."
@@ -92,7 +90,7 @@ export const Location = {
 export const Targetable = {
   lookAt(target: TargetableType, game: Game): Reaction {
     const name = target.name
-    const propertyNames = "properties" in target ? ItemHelper.getPropertyNames(target as ItemType) : null
+    const propertyNames = "properties" in target ? (target as ItemType).getPropertyNames() : null
     const itemNames = target.items?.map(item => item.name)
     const output = [name, propertyNames, itemNames]
     return {
