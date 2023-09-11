@@ -1,4 +1,4 @@
-import { Map } from "../types"
+import { Map } from "../src/types"
 
 export const map: Map = {
   start: ["path"],

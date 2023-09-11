@@ -91,6 +91,7 @@ export const Targetable = {
   lookAt(target: TargetableType, game: Game): Reaction {
     const name = target.name
     const propertyNames = "properties" in target ? (target as ItemType).getPropertyNames() : null
+    // TODO: Fix error here: undefined is not an object (evaluating 'item.name')
     const itemNames = target.items?.map(item => item.name)
     const output = [name, propertyNames, itemNames]
     return {

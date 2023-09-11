@@ -19,10 +19,10 @@ import {
 import { Location } from "./domains/location"
 import { Item } from "./models/item"
 // Data
-import { items } from "./data/items"
-import { locations} from "./data/locations"
-import { map } from "./data/maps"
-import { player } from "./data/players"
+import { items } from "../data/items"
+import { locations} from "../data/locations"
+import { map } from "../data/maps"
+import { player } from "../data/players"
 
 class Commands {
   private game: Game

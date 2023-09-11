@@ -1,4 +1,4 @@
-import type { RawItem } from "../types"
+import type { RawItem } from "../src/types"
 
 export const items: RawItem[] = [
   {

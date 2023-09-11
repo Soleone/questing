@@ -1,5 +1,5 @@
-import type { Player, Item as ItemType, Game } from "../types"
-import { Item as ItemActions, Container } from "../actions"
+import type { Player, Item as ItemType, Game } from "../src/types"
+import { Item as ItemActions, Container } from "../src/actions"
 
 export const player: Player = {
   name: "Player",

@@ -9,7 +9,7 @@ A game framework to build extensible player interactions. Developed to run in th
 1. Install Bun
 2. Clone repo
 3. `bun install`
-4. `bun game.ts`
+4. `bun src/game.ts`
 
 ## Fundamentals
 
@@ -44,4 +44,5 @@ A game framework to build extensible player interactions. Developed to run in th
 
 ## Contributing
 
-`bun test` to run all tests
+- `bun test` to run all tests
+- You can play around in `src/old/example.ts` to get started

@@ -1,4 +1,4 @@
-import { items } from "../data/items"
+import { items } from "../../data/items"
 import { Item } from "../models/item"
 
 

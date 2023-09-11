@@ -1,4 +1,4 @@
-import type { IndexedList, Location } from "../types"
+import type { IndexedList, Location } from "../src/types"
 import { items } from "./items"
 
 export const locations: IndexedList<Location> = {

@@ -1,9 +1,9 @@
 import { describe, expect, test, beforeEach } from "bun:test"
-import { Item } from "../../models/item"
+import { Item } from "../../src/models/item"
 import {
   RawItem as RawItemType,
   Item as ItemType,
-} from "../../types"
+} from "../../src/types"
 
 let rawItems: RawItemType[] = [
   { name: "item 1" },
