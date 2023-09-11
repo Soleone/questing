@@ -1,4 +1,4 @@
-https://github.com/Soleone/questing/actions/workflows/bun.yml/badge.svg
+![](https://github.com/Soleone/questing/actions/workflows/bun.yml/badge.svg)
 
 # Questing
 
