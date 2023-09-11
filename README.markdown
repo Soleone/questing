@@ -11,6 +11,10 @@ A game framework to build extensible player interactions. Developed to run in th
 
 ## Fundamentals
 
+- Players move between Locations
+- Locations can have items (e.g. furniture)
+- Items can have sub-items (independent of the parent item) and properties (part of the parent item)
+- LocationMap links locations together to determine connections
 - Actions take a Game as arguments (to be able to act on anything) and return a Reaction
 
 ## Features
@@ -34,7 +38,7 @@ A game framework to build extensible player interactions. Developed to run in th
   - items
 - [ ] Openable containers that have their items hidden otherwise
 - [ ] Turn into visual Remix app
-- [ ] Tests
+- [ ] More tests
 
 ## Contributing
 
