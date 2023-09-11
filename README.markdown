@@ -1,3 +1,5 @@
+https://github.com/Soleone/questing/actions/workflows/bun.yml/badge.svg
+
 # Questing
 
 A game framework to build extensible player interactions. Developed to run in the [Bun](https://bun.sh) environment.
