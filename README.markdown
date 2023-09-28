@@ -1,4 +1,6 @@
-![](https://github.com/Soleone/questing/actions/workflows/bun.yml/badge.svg)
+![Tests status](https://github.com/Soleone/questing/actions/workflows/bun.yml/badge.svg)
+![MIT license](https://img.shields.io/github/license/Soleone/questing)
+![Last commit](https://img.shields.io/github/last-commit/Soleone/questing/main)
 
 # Questing
 
